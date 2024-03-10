@@ -13,3 +13,7 @@ Route::prefix('auth')->name('auth.')->group(function () {
    Route::post('login' , [ \App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store'] )->name('login');
    Route::middleware(['auth:sanctum'])->post('logout' , [ \App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'] )->name('logout');
 });
+
+Route::prefix('panel')->name('panel.')->group(function () {
+   Route::apiResource('users' , \App\Http\Controllers\Panel\UserController::class);
+});

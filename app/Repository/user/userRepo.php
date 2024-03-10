@@ -11,37 +11,39 @@ class userRepo
 {
     public function index()
     {
-
+        return User::query()->orderByDesc('created_at')->paginate();
     }
 
     public function create($data)
     {
-
+        return $this->createUser($data);
     }
 
     public function getFindId($id)
     {
-
+        return User::query()->findOrFail($id);
     }
 
     public function update($data, $id)
     {
-
+        $userId = $this->getFindId($id);
+        return User::query()->where('id' , $id)->update([
+            'name' => $data['name'] ?? $userId->name ,
+            'email' => $data['email'] ?? $userId->email ,
+            'password' => Hash::make($data['password']) ?? $userId->password ,
+        ]);
     }
 
     public function deleted($id)
     {
-
+        $user =  User::query()->where('id' , $id)->delete();
+        if(is_null($user)) return false ;
+        return $user ;
     }
 
     public function userRegister($data)
     {
-        $user = User::query()->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'remember_token' => Str::uuid()
-        ]);
+        $user = $this->createUser($data);
         return TokenService::generateToken($user);
 
     }
@@ -53,5 +55,15 @@ class userRepo
         $password = Hash::check($data['password'], $user->password);
         if ($password === false) return false;
         return TokenService::generateToken($user);
+    }
+
+    public function createUser($data)
+    {
+        return User::query()->create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'remember_token' => Str::uuid()
+        ]);
     }
 }
