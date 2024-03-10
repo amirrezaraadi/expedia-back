@@ -5,6 +5,7 @@ namespace App\Repository\user;
 use App\Models\User;
 use App\Service\TokenService;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class userRepo
 {
@@ -39,6 +40,7 @@ class userRepo
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'remember_token' => Str::uuid()
         ]);
         return TokenService::generateToken($user);
 

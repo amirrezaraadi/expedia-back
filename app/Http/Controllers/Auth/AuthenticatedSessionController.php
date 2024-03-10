@@ -11,20 +11,15 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
-    public function store(LoginRequest $request , userRepo $userRepo): \Illuminate\Http\JsonResponse
+    public function store(LoginRequest $request, userRepo $userRepo): \Illuminate\Http\JsonResponse
     {
-        $user = $userRepo->userLogin($request->only('email' , 'password'));
-        return response()->json(['token' => $user ],200);
+        $user = $userRepo->userLogin($request->only('email', 'password'));
+        return response()->json(['token' => $user], 200);
     }
 
-    public function destroy(Request $request): Response
+    public function destroy(Request $request): \Illuminate\Http\JsonResponse
     {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return response()->noContent();
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['token' => 'bay'], 200);
     }
 }
