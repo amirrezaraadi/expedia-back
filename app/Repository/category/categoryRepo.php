@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 
 class categoryRepo
 {
-
     public function index()
     {
         return Category::query()->with('child')->orderByDesc('created_at')->get();
@@ -20,8 +19,6 @@ class categoryRepo
         return Category::query()->create([
             'title' => $value->title,
             'slug' => SlugService::createSlug(Category::class, 'slug', $value->title),
-            'title_en' => $value->title_en,
-            'slug_en' => Str::slug( $value->title_en),
             'parent_id' => $value->parent_id,
             'user_id' => auth()->id(),
         ]);
@@ -38,16 +35,16 @@ class categoryRepo
         return Category::query()->where('id', $id)->update([
             'title' => $value->title ?? $categoryId->title,
             'slug' => SlugService::createSlug(Category::class, 'slug', $value->title ?? $categoryId->title),
-            'title_en' => $value->title_en ?? $categoryId->title_en,
-            'slug_en' => Str::slug($value->title_en ?? $categoryId->title_en),
-            'parent_id' =>  $value->parent_id,
+            'parent_id' => $value->parent_id,
             'user_id' => auth()->id(),
         ]);
     }
+
     public function delete($id)
     {
         return Category::query()->where('id', $id)->delete();
     }
+
     public function getTitleId($id)
     {
         return Category::query()->where('id', $id)->first();
@@ -72,6 +69,7 @@ class categoryRepo
     {
         return Category::query()->where('slug_en', $slug)->first();
     }
+
     public function getFindById($id)
     {
         return Category::query()->where('id', $id)->get()->first();
@@ -84,6 +82,7 @@ class categoryRepo
             'slug_en',
         ])->get();
     }
+
     public function getFindPesaonEn()
     {
         return Category::query()->select([

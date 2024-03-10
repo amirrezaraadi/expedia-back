@@ -8,24 +8,30 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Category extends Model
+class Article extends Model
 {
-    use HasFactory , Sluggable;
+    use HasFactory, Sluggable;
+
     protected $fillable = [
         'title',
+        'sub_title',
         'slug',
-        'parent_id',
+        'featuring_image',
+        'tags',
+        'star',
+        'status',
+        'view_count',
+        'content',
+        'image',
         'user_id',
     ];
+    const STATUS_PENDING = 'pending';
+    const STATUS_SUCCESS = 'success';
+    const STATUS_REJECT = 'reject';
 
-    protected $hidden = [
-        'user_id',
+    public static $status = [self::STATUS_SUCCESS, self::STATUS_REJECT, self::STATUS_PENDING];
 
-        'created_at',
-        'pivot'
-    ];
     public function sluggable(): array
     {
         return [
@@ -35,23 +41,15 @@ class Category extends Model
         ];
     }
 
-    public function parent(): BelongsTo
-    {
-        return $this->belongsTo(Category::class , 'parent_id');
-    }
-
-    public function child(): HasMany
-    {
-        return $this->hasMany(self::class , 'parent_id');
-    }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function articles():BelongsToMany
+    public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Article::class , 'category_article');
+        return $this->belongsToMany(Category::class, 'category_article');
     }
+
 }
