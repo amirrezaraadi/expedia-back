@@ -37,7 +37,6 @@ class userRepo
     public function deleted($id)
     {
         $user =  User::query()->where('id' , $id)->delete();
-        if(is_null($user)) return false ;
         return $user ;
     }
 

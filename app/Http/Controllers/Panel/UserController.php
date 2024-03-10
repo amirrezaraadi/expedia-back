@@ -39,7 +39,9 @@ class UserController extends Controller
 
     public function destroy( $id)
     {
-        $this->userRepo->deleted($id);
+        $deleted = $this->userRepo->deleted($id);
+        if($deleted === 0 )
+            return response()->json(['message' => 'not found user' , 'status' => 'error'],404);
         return response()->json(['message' => 'success deleted user' , 'status' => 'success'],200);
     }
 }

@@ -14,6 +14,8 @@ Route::prefix('auth')->name('auth.')->group(function () {
    Route::middleware(['auth:sanctum'])->post('logout' , [ \App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'] )->name('logout');
 });
 
-Route::prefix('panel')->name('panel.')->group(function () {
+Route::middleware(['auth:sanctum'])->prefix('panel')->name('panel.')->group(function () {
    Route::apiResource('users' , \App\Http\Controllers\Panel\UserController::class);
+   Route::apiResource('categories' , \App\Http\Controllers\Panel\CategoryController::class);
+
 });
