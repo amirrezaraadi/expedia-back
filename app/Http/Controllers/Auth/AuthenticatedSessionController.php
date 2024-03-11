@@ -22,4 +22,8 @@ class AuthenticatedSessionController extends Controller
         $request->user()->currentAccessToken()->delete();
         return response()->json(['token' => 'bay'], 200);
     }
+    public function me(Request $request)
+    {
+        return \response()->json(['user' => auth()->user()] , 200);
+    }
 }

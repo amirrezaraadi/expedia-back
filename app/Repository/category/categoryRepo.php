@@ -57,7 +57,7 @@ class categoryRepo
 
     public function getParentId()
     {
-        return Category::query()->where('parent_id', null)->with('parent')->get();
+        return Category::query()->where('parent_id', null)->get();
     }
 
     public function getByShowId($id)

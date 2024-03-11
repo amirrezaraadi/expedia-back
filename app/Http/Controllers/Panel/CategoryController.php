@@ -45,4 +45,9 @@ class CategoryController extends Controller
             return response()->json(['message' => 'category not found' , 'status' => 'error'],404);
         return response()->json(['message' => 'success deleted category' , 'status' => 'success'],200);
     }
+
+    public function parent()
+    {
+        return $this->categoryRepo->getParentId();
+    }
 }

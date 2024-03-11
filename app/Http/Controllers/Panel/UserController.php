@@ -44,4 +44,6 @@ class UserController extends Controller
             return response()->json(['message' => 'not found user' , 'status' => 'error'],404);
         return response()->json(['message' => 'success deleted user' , 'status' => 'success'],200);
     }
+
+
 }
