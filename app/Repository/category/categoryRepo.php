@@ -11,7 +11,7 @@ class categoryRepo
 {
     public function index()
     {
-        return Category::query()->with('child')->orderByDesc('created_at')->get();
+        return Category::query()->with('child')->orderByDesc('created_at')->paginate();
     }
 
     public function store($value)

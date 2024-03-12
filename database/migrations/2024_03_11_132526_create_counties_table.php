@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('counties', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('slug')->nullable()->unique();
+            $table->unsignedBigInteger('number')->nullable();
+            $table->string('map')->nullable();
+            $table->string('content')->nullable();
             $table->timestamps();
         });
     }
