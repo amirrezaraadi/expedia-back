@@ -91,4 +91,9 @@ class categoryRepo
             'slug_en',
         ])->get();
     }
+
+    public function indexAll()
+    {
+        return Category::query()->select(['id' , 'title' ])->paginate();
+    }
 }

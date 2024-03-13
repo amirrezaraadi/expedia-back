@@ -18,6 +18,9 @@ Route::prefix('auth')->name('auth.')->group(function () {
 Route::middleware(['auth:sanctum'])->prefix('panel')->name('panel.')->group(function () {
     Route::apiResource('users', \App\Http\Controllers\Panel\UserController::class);
     Route::apiResource('categories', \App\Http\Controllers\Panel\CategoryController::class);
+    Route::apiResource('articles', \App\Http\Controllers\Panel\ArticleController::class);
     Route::get('category-parent' , [\App\Http\Controllers\Panel\CategoryController::class , 'parent'])
         ->name('parent');
+    Route::get('category-all' , [\App\Http\Controllers\Panel\CategoryController::class , 'all'])
+        ->name('all');
 });

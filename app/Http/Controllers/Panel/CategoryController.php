@@ -50,4 +50,9 @@ class CategoryController extends Controller
     {
         return $this->categoryRepo->getParentId();
     }
+
+    public function all()
+    {
+        return $categories = $this->categoryRepo->indexAll();
+    }
 }

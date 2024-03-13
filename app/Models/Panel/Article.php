@@ -41,6 +41,9 @@ class Article extends Model
         ];
     }
 
+    protected $casts = [
+      'tags' => 'array'
+    ];
 
     public function user(): BelongsTo
     {
