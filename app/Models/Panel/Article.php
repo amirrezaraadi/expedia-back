@@ -44,7 +44,12 @@ class Article extends Model
     protected $casts = [
       'tags' => 'array'
     ];
+    protected $appends = ['image_original' ];
 
+    public function getImageOriginalAttribute()
+    {
+        return asset('images/articles/' . $this->image);
+    }
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -54,5 +59,6 @@ class Article extends Model
     {
         return $this->belongsToMany(Category::class, 'category_article');
     }
+
 
 }
