@@ -48,7 +48,9 @@ class ArticleController extends Controller
 
     public function destroy($article)
     {
-        $this->articleRepo->deleted($article);
+        $deleted =  $this->articleRepo->deleted($article);
+        if($deleted === 0)
+            return response()->json(['message' => 'Not Found Id ', 'status' => 'error'], 404);
         return response()->json(['message' => 'success deleted article', 'status' => 'success'], 200);
     }
 

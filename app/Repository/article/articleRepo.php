@@ -10,7 +10,7 @@ class articleRepo
 {
     public function index()
     {
-        return Article::query()->paginate();
+        return Article::query()->paginate(8);
     }
 
     public function create($data, $image)
@@ -46,7 +46,7 @@ class articleRepo
 
     public function deleted($id)
     {
-        return Article::query();
+        return Article::query()->where('id', $id)->delete();
     }
 
     public function status($id, $status)
@@ -63,12 +63,9 @@ class articleRepo
     {
         $article = $this->getFindWhere($id);
             if(is_null($article))  return false ;
-        $true = $article->where('star', 1)->first();
-        if ($true) {
-            return $article->update(['star' => 0]);
-        } else {
-            return $article->update(['star' => 1]);
-        }
+        $true = $article->where('star', 1)->get();
+        $article->update(['star' => !$article->star]);
+        return $article;
 
     }
 
