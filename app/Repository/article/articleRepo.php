@@ -10,17 +10,15 @@ class articleRepo
 {
     public function index()
     {
-        return Article::query()->paginate(8);
+        return Article::query()->with('categories')->paginate(8);
     }
 
     public function create($data, $image)
     {
-//        dd(Str::slug( $data->title));
         return Article::query()->create([
             'title' => $data->title,
             'sub_title' => $data->sub_title,
-//            'slug' => SlugService::createSlug(Article::class, 'slug', $data->title),
-            'slug' => Str::slug($data->title),
+            'slug' => SlugService::createSlug(Article::class, 'slug', $data->title),
             'featuring_image' => $image,
             'tags' => $data->tags,
             'content' => $data->content,
@@ -62,11 +60,10 @@ class articleRepo
     public function getStar($id)
     {
         $article = $this->getFindWhere($id);
-            if(is_null($article))  return false ;
+        if (is_null($article))  return false;
         $true = $article->where('star', 1)->get();
         $article->update(['star' => !$article->star]);
         return $article;
-
     }
 
     public function getCreatedAt()

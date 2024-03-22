@@ -14,6 +14,9 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request, userRepo $userRepo): \Illuminate\Http\JsonResponse
     {
         $user = $userRepo->userLogin($request->only('email', 'password'));
+        if($user == false)
+            return response()->json(['message' => 'not found user' , 'status' => 'error'], 404);
+
         return response()->json(['token' => $user], 200);
     }
 

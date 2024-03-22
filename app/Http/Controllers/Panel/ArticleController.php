@@ -7,6 +7,7 @@ use App\Models\Panel\Article;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Repository\article\articleRepo;
+use App\Repository\category\categoryRepo;
 use Illuminate\Support\Str;
 
 class ArticleController extends Controller
@@ -21,20 +22,22 @@ class ArticleController extends Controller
     }
 
 
-    public function store(StoreArticleRequest $request)
+    public function store(StoreArticleRequest $request , categoryRepo $categoryRepo)
     {
+
+        $category = $categoryRepo->findManyId($request->category);
         $file = $request->file('image');
         $file_name = Str::random(15) . 'Controllers' . $file->getClientOriginalName();
         $file->move(public_path('images/articles/'), $file_name);
 //        $file_name = 'image' ;
-        $this->articleRepo->create($request, $file_name);
+        $article = $this->articleRepo->create($request, $file_name);
+        $article->categories()->sync($category);
         return response()->json(['message' => 'success create article', 'status' => 'success'], 200);
     }
 
 
     public function show($article)
     {
-        // todo error 404
         return $this->articleRepo->getFindId($article);
     }
 

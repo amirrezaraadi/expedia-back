@@ -31,4 +31,6 @@ Route::middleware(['auth:sanctum'])->prefix('panel')->name('panel.')->group(func
         ->name('parent');
     Route::get('category-all', [\App\Http\Controllers\Panel\CategoryController::class, 'all'])
         ->name('all');
+    Route::apiResource('tags' , \App\Http\Controllers\Panel\TagController::class);
+    Route::apiResource('ads' , \App\Http\Controllers\Panel\AdsController::class);
 });

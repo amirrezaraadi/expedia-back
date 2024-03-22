@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Panel;
 
-use App\Models\User\County;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCountyRequest;
 use App\Http\Requests\UpdateCountyRequest;
+use App\Models\User\County;
 
 class CountyController extends Controller
 {

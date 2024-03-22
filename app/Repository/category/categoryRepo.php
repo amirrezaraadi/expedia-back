@@ -96,4 +96,10 @@ class categoryRepo
     {
         return Category::query()->select(['id' , 'title' ])->paginate();
     }
+
+    public function findManyId($id)
+    {
+        $id = explode(','  , $id);
+        return Category::query()->whereIn('id' , $id)->get()->pluck('id')->toArray();
+    }
 }
