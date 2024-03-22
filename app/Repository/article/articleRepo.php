@@ -39,7 +39,17 @@ class articleRepo
 
     public function update($data, $id, $image)
     {
-        return Article::query();
+        $article_id = $this->getFindWhere($id);
+        return Article::query()->where('id', $id)->update([
+            'title' => $data->title ?? $article_id->title,
+            'sub_title' => $data->sub_title ?? $article_id->sub_title,
+            'slug' => SlugService::createSlug(Article::class, 'slug', $data->title ?? $article_id->sub_title),
+            'featuring_image' => $image ?? $article_id->image,
+            'tags' => $data->tags ?? $article_id->tags,
+            'content' => $data->content ?? $article_id->content,
+            'image' => $image ?? $article_id->image,
+            'user_id' => auth()->id(),
+        ]);
     }
 
     public function deleted($id)
@@ -60,7 +70,7 @@ class articleRepo
     public function getStar($id)
     {
         $article = $this->getFindWhere($id);
-        if (is_null($article))  return false;
+        if (is_null($article)) return false;
         $true = $article->where('star', 1)->get();
         $article->update(['star' => !$article->star]);
         return $article;

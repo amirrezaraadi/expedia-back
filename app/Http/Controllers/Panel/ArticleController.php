@@ -8,6 +8,8 @@ use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Repository\article\articleRepo;
 use App\Repository\category\categoryRepo;
+use App\Repository\tag\tagRepo;
+use App\Service\mediaService;
 use Illuminate\Support\Str;
 
 class ArticleController extends Controller
@@ -22,16 +24,18 @@ class ArticleController extends Controller
     }
 
 
-    public function store(StoreArticleRequest $request , categoryRepo $categoryRepo)
+    public function store(StoreArticleRequest $request , categoryRepo $categoryRepo , tagRepo $tagRepo)
     {
-
-        $category = $categoryRepo->findManyId($request->category);
-        $file = $request->file('image');
-        $file_name = Str::random(15) . 'Controllers' . $file->getClientOriginalName();
-        $file->move(public_path('images/articles/'), $file_name);
-//        $file_name = 'image' ;
-        $article = $this->articleRepo->create($request, $file_name);
-        $article->categories()->sync($category);
+        $file_name = mediaService::imagee_article($request->file('image'));
+        $store = $article = $this->articleRepo->create($request, $file_name);
+        if($request->category){
+            $category = $categoryRepo->findManyId($request->category);
+            $article->categories()->sync($category);
+        }
+        if($request->tags) {
+            $tags = $tagRepo->getFindIdMany($request->tags);
+            $tagRepo->sluggable($store, $tags);
+        }
         return response()->json(['message' => 'success create article', 'status' => 'success'], 200);
     }
 
@@ -42,9 +46,20 @@ class ArticleController extends Controller
     }
 
 
-    public function update(UpdateArticleRequest $request, $article)
+    public function update(UpdateArticleRequest $request, $article , categoryRepo $categoryRepo , tagRepo $tagRepo)
     {
-        $this->articleRepo->update($request, $article);
+        $articleId = $this->articleRepo->getFindId($article);
+        $file_name = mediaService::imagee_article($request->file('image'));
+        $this->articleRepo->update($request, $article , $file_name);
+        if($request->category){
+            $category = $categoryRepo->findManyId($request->category);
+            $articleId->categories()->detach();
+            $articleId->categories()->sync($category);
+        }
+        if($request->tags) {
+            $tags = $tagRepo->getFindIdMany($request->tags);
+            $tagRepo->sluggable($articleId, $tags);
+        }
         return response()->json(['message' => 'success updated article', 'status' => 'success'], 200);
     }
 
