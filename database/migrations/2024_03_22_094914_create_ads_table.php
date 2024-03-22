@@ -13,6 +13,18 @@ return new class extends Migration
     {
         Schema::create('ads', function (Blueprint $table) {
             $table->id();
+            $table->string('title') ;
+            $table->string('slug')->nullable()->unique();
+            $table->enum('advertising' , \App\Models\Panel\Ads::$advertising);
+            $table->enum('type_advertising' , \App\Models\Panel\Ads::$typees);
+            $table->timestamp("expire_at")->nullable();
+            $table->enum('opening_limit' , \App\Models\Panel\Ads::$opening_limit );
+            $table->string('image')->nullable() ;
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->softDeletes() ;
             $table->timestamps();
         });
     }

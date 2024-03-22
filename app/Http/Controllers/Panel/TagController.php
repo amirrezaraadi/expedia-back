@@ -19,13 +19,11 @@ class TagController extends Controller
         return $tags = $this->tagRepo->index();
     }
 
-
     public function store(StoreTagRequest $request): \Illuminate\Http\JsonResponse
     {
         $this->tagRepo->create($request->only('title', 'content'));
         return response()->json(['message' => 'success create ', 'status' => 'success'], 200);
     }
-
     public function show($tag)
     {
         return $this->tagRepo->getFindId($tag);
