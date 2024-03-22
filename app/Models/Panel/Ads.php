@@ -2,13 +2,15 @@
 
 namespace App\Models\Panel;
 
+use App\Models\User;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ads extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory , SoftDeletes , Sluggable;
 
     protected $fillable = [
         'title',
@@ -61,6 +63,19 @@ class Ads extends Model
         self::OPENING_LIMIT_DAY_EIGHT,
         self::OPENING_LIMIT_DAY_NINE,
     ];
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => ['title', 'slug']
+            ]
+        ];
+    }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
+    protected $casts = ['expire_at' => 'timestamp'];
 }
